@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+
+  <form id="idForm" action="">
+
+    <input type="text" id="ida">
+    <br>
+    <br>
+    <br>
+    <input type="text" id="idb">
+    <br>
+    <br>
+    <br>
+    <input type="text" id="idc">
+    <br>
+    <br>
+    <br>
+    <input type="text" id="idd">
+    <br>
+    <br>
+    <br>
+    <input type="text" id="ide">
+    <br>
+    <br>
+    <br>
+    <button type="button" id="idBtnPost">botao do post</button>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <button type="button" id="idGetSession">botao do get com id no session</button>
+    <br>
+    <br>
+    <br>
+    <h1 id="idH1"></h1>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <button type="button" id="idQuefiz">botao id 3 do banco</button>
+    <br>
+    <br>
+    <br>
+    <h1 id="idH2"></h1>
+
+  </form>
+  <script>
+
+    let form = document.getElementById("idForm");
+    let btnPost = document.getElementById("idBtnPost");
+    let btnGetSession = document.getElementById("idGetSession");
+    let h1 = document.getElementById("idH1");
+    let btnQuefiz = document.getElementById("idQuefiz");
+    let h2 = document.getElementById("idH2");
+
+    btnPost.addEventListener("click", function (event) {
+
+      const clima = {
+        formatoHora: document.getElementById("ida").value,
+        escalaTemp: document.getElementById("idb").value,
+        cidade: document.getElementById("idc").value,
+        sexo: document.getElementById("idd").value,
+        nome: document.getElementById("ide").value
+      };
+
+      fetch("https://localhost:3001/config", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(clima)
+
+      }).then(response => response.json())
+        .then(data => {
+          let id = data.id;
+          localStorage.setItem("id", id);
+          console.log(data.id);
+          console.log(localStorage.getItem("id"));
+        })
+        .catch(err => console.log(data + err));
+      })
+
+      let urlQuefiz = "https://localhost:3001/config?id=3";
+
+      btnGetSession.addEventListener("click", function (event) {
+        let i = localStorage.getItem("id");
+        let urlSession = "https://localhost:3001/config?id=" + i;
+
+      console.log(localStorage.getItem("id"))
+      console.log(i);
+
+        fetch(urlSession)
+          .then(response => response.json())
+          .then(data => {
+            console.log(urlSession)
+            document.getElementById("idH1").innerHTML = data.value.formatoHora + " " + data.value.escalaTemp + " " + data.value.cidade + " " + data.value.sexo
+          })
+          .catch(err => console.log(err));
+      })
+
+      btnQuefiz.addEventListener("click", function (event) {
+
+      fetch(urlQuefiz)
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById("idH2").innerHTML = data.value.formatoHora + " " + data.value.escalaTemp + " " + data.value.cidade + " " + data.value.sexo
+        })
+        .catch(err => console.log(err));
+
+      })
+
+  </script>
+</body>
+
+
+</html>
